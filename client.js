@@ -1,9 +1,10 @@
 const net = require('net');
+const { IP, PORT } = require('./constants');
 
 const connect = function() {
   const conn = net.createConnection({
-    host: '135.23.222.148',
-    port: 50541
+    host: IP,
+    port: PORT
   });
   // interpret incoming data as text
   conn.setEncoding('utf8');
@@ -26,11 +27,14 @@ const connect = function() {
   });
 
   conn.on('connect', () => {
-    conn.write("Move: up");
+    setTimeout(() => conn.write("Move: up"), 2000); 
   });
-
 
   return conn;
 }
 
 module.exports = { connect };
+
+/*
+how this works is that if I put the setTimeout function as the call back function when conn.on happens, setTimeout takes its own function which is conn.write and will call conn.write after its callback input of 2000 ms occurs. After the 2000ms wait, setTimeout then fires conn.write which moves the snake up
+*/
